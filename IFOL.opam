@@ -1,0 +1,25 @@
+opam-version: "2.0"
+maintainer: "emarzion@gmail.com"
+version: "dev"
+
+homepage: "https://github.com/emarzion/IFOL"
+dev-repo: "git+https://github.com/emarzion/IFOL.git"
+bug-reports: "https://github.com/emarzion/IFOL/issues"
+license: "GPL"
+
+synopsis: "Coq formalization of intuitionistic first-order logic"
+
+build: [
+  ["./configure.sh"]
+  [make "-j%{jobs}%"]
+]
+install: [make "install"]
+
+depends: [
+  "coq" {(= "8.16.1")}
+]
+
+authors: [
+  "Evan Marzion"
+]
+Footer

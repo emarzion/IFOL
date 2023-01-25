@@ -1,0 +1,18 @@
+
+name: Docker CI
+
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        coq_image:
+          - '8.16.1'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: coq-community/docker-coq-action@v1
+        with:
+          opam_file: 'IFOL.opam'
+          custom_image: coqorg/coq:${{ matrix.coq_image }}
