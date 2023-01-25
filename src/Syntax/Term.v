@@ -1,7 +1,7 @@
-Require Import CoqFol.Util.HVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.HVec.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
+Require Import IFOL.Syntax.Signature.
 
 Inductive Term {S} (f_sg : f_sig S) (env : list S) : S -> Type :=
   | var (s : S) :

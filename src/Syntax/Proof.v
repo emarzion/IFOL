@@ -1,9 +1,9 @@
-Require Import CoqFol.Util.BList.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.BList.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
-Require Import CoqFol.Syntax.Term.
-Require Import CoqFol.Syntax.Formula.
+Require Import IFOL.Syntax.Signature.
+Require Import IFOL.Syntax.Term.
+Require Import IFOL.Syntax.Formula.
 
 Lemma foo {S} {sg : sig S} :
   forall x env, Formula sg env -> Formula sg (x :: env).

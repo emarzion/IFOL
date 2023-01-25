@@ -1,4 +1,4 @@
-From Coq Require Import List.
+Require Import List.
 Import ListNotations.
 
 Fixpoint list_index {X} (xs : list X) : Type :=

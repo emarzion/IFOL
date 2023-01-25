@@ -1,18 +1,18 @@
 Require Import Coq.Program.Equality.
 
-Require Import CoqFol.Util.BList.
-Require Import CoqFol.Util.BVec.
-Require Import CoqFol.Util.HVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.BList.
+Require Import IFOL.Util.BVec.
+Require Import IFOL.Util.HVec.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
-Require Import CoqFol.Syntax.Term.
-Require Import CoqFol.Syntax.Formula.
-Require Import CoqFol.Syntax.Proof.
+Require Import IFOL.Syntax.Signature.
+Require Import IFOL.Syntax.Term.
+Require Import IFOL.Syntax.Formula.
+Require Import IFOL.Syntax.Proof.
 
-Require Import CoqFol.Semantics.Signature.
-Require Import CoqFol.Semantics.Term.
-Require Import CoqFol.Semantics.Formula.
+Require Import IFOL.Semantics.Signature.
+Require Import IFOL.Semantics.Term.
+Require Import IFOL.Semantics.Formula.
 
 Definition seq_dom {S} {sg : sig S} {env}
   (eval_S : sort_dom S) (eval_sig : sig_dom eval_S sg) (args : env_dom eval_S env)

@@ -1,14 +1,14 @@
 Require Import Coq.Program.Equality.
 
-Require Import CoqFol.Util.RHVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.RHVec.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
-Require Import CoqFol.Syntax.Term.
-Require Import CoqFol.Syntax.Formula.
+Require Import IFOL.Syntax.Signature.
+Require Import IFOL.Syntax.Term.
+Require Import IFOL.Syntax.Formula.
 
-Require Import CoqFol.Semantics.Signature.
-Require Import CoqFol.Semantics.Term.
+Require Import IFOL.Semantics.Signature.
+Require Import IFOL.Semantics.Term.
 
 Definition eval_NullOp (o : NullOp) : Prop :=
   match o with
@@ -279,7 +279,7 @@ Proof.
         apply IHterms.
 Defined.
 
-Require Import CoqFol.Syntax.Proof.
+Require Import IFOL.Syntax.Proof.
 (* TODO: move suff_weaken *)
 
 Lemma eval_Formula_suff_weaken {S} {eval_S} {sg : sig S}

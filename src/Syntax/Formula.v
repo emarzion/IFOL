@@ -1,8 +1,8 @@
-Require Import CoqFol.Util.HVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.HVec.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
-Require Import CoqFol.Syntax.Term.
+Require Import IFOL.Syntax.Signature.
+Require Import IFOL.Syntax.Term.
 
 Inductive NullOp :=
   | Bot

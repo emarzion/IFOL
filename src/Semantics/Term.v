@@ -1,13 +1,13 @@
 Require Import Coq.Program.Equality.
 
-Require Import CoqFol.Util.HVec.
-Require Import CoqFol.Util.RHVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.HVec.
+Require Import IFOL.Util.RHVec.
+Require Import IFOL.Util.Witness.
 
-Require Import CoqFol.Syntax.Signature.
-Require Import CoqFol.Syntax.Term.
+Require Import IFOL.Syntax.Signature.
+Require Import IFOL.Syntax.Term.
 
-Require Import CoqFol.Semantics.Signature.
+Require Import IFOL.Semantics.Signature.
 
 Definition env_dom {S} (eval_S : sort_dom S) (env : list S) : Type :=
   RHVec eval_S env.

@@ -1,8 +1,8 @@
 Require Import List.
 Import ListNotations.
 
-Require Import CoqFol.Util.Witness.
-Require Import CoqFol.Util.List_index.
+Require Import IFOL.Util.Witness.
+Require Import IFOL.Util.List_index.
 
 (*
 Inductive BList {X} (Y : list X -> Type) : list X -> Type :=

@@ -3,8 +3,8 @@ Import ListNotations.
 
 Require Import Coq.Program.Equality.
 
-Require Import CoqFol.Util.RHVec.
-Require Import CoqFol.Util.BList.
+Require Import IFOL.Util.RHVec.
+Require Import IFOL.Util.BList.
 
 (* Inductive BVec {X} {Y : list X -> Type} {F : X -> Type}
   (G : forall xs, HVec F xs -> Y xs -> Type)

@@ -1,6 +1,6 @@
-Require Import CoqFol.Util.RHVec.
-Require Import CoqFol.Util.Witness.
-Require Import CoqFol.Syntax.Signature.
+Require Import IFOL.Util.RHVec.
+Require Import IFOL.Util.Witness.
+Require Import IFOL.Syntax.Signature.
 
 Definition sort_dom S : Type := S -> Type.
 

@@ -2,7 +2,7 @@ Require Import Coq.Program.Equality.
 Require Import List.
 Import ListNotations.
 
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.Witness.
 
 Inductive HVec {X} (Y : X -> Type) : list X -> Type :=
   | hvnil : HVec Y []

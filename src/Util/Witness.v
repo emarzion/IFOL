@@ -53,5 +53,3 @@ Inductive suffix_wit {X} : list X -> list X -> Type :=
   | sw_refl {xs} : suffix_wit xs xs
   | sw_cons {xs} {x} {ys} : suffix_wit xs ys ->
       suffix_wit xs (x :: ys).
-
-

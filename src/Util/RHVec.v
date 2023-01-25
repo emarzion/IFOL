@@ -2,9 +2,9 @@ Require Import Coq.Program.Equality.
 Require Import List.
 Import ListNotations.
 
-Require Import CoqFol.Util.List_index.
-Require Import CoqFol.Util.HVec.
-Require Import CoqFol.Util.Witness.
+Require Import IFOL.Util.List_index.
+Require Import IFOL.Util.HVec.
+Require Import IFOL.Util.Witness.
 
 Fixpoint RHVec {X} (Y : X -> Type) (xs : list X) : Type :=
   match xs with
