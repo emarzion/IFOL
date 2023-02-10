@@ -53,3 +53,9 @@ Inductive suffix_wit {X} : list X -> list X -> Type :=
   | sw_refl {xs} : suffix_wit xs xs
   | sw_cons {xs} {x} {ys} : suffix_wit xs ys ->
       suffix_wit xs (x :: ys).
+
+Fixpoint sw_nil {X} (xs : list X) : suffix_wit [] xs :=
+  match xs with
+  | [] => sw_refl
+  | x :: ys => sw_cons (sw_nil ys)
+  end.
