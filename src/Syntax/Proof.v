@@ -25,11 +25,6 @@ Proof.
   exact (data _ b).
 Defined.
 
-Print Theory.
-Check proj_with_weakenings.
-
-Print suffix_wit.
-
 Inductive Proof {S} {sg : sig S} (th : Theory sg) : forall {env},
   BList (Formula sg) env -> Formula sg env -> Type :=
   | Ax (i : carrier sg th) {env} {seq : BList (Formula sg) env}
