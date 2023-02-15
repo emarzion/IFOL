@@ -7,3 +7,4 @@ Makefile.conf
 *.glob
 *.aux
 _CoqProject
+*.lia.cache
