@@ -175,7 +175,17 @@ Proof.
     + apply (QuantifierProp _ Nat Pi).
       apply (BinProp _ Exp).
       * exact P.
-      * (* TODO:fix*) exact P.
+      * assert (Term (Signature.func HA_sig) [Nat] Nat) as Sx.
+        { apply (@f_app HA_sort HA_f_sig _ Succ).
+          apply hvcons.
+          - apply var.
+            apply whd.
+          - apply hvnil.
+        }
+        eapply Formula_var_subst.
+        ** exact Sx.
+        ** exact P.
+        ** exact whd.
     + apply (QuantifierProp _ Nat Pi).
       exact P.
 Defined.

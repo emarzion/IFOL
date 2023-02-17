@@ -126,3 +126,38 @@ Fixpoint Formula_subterm_subst {S} {sg : sig S} {env} {s}
           terms
         )
   end.
+
+Fixpoint Formula_var_subst {S} {sg : sig S} {env} {s}
+  (u : Term (func sg) env s) (p : Formula sg env)
+  (w : witness s env) : Formula sg env.
+Proof.
+  destruct p.
+  - exact (NullProp sg n).
+  - apply (BinProp sg b).
+    + exact (Formula_var_subst _ _ _ _ u p1 w).
+    + exact (Formula_var_subst _ _ _ _ u p2 w).
+  - apply (QuantifierProp sg s0 q).
+    eapply Formula_var_subst.
+    apply (Term_weaken pwhd).
+    exact u.
+    exact p.
+    apply wtl.
+    exact w.
+  - apply (EqualityProp sg env s0).
+    + eapply Term_var_subst.
+      exact u.
+      exact t.
+      exact w.
+    + eapply Term_var_subst.
+      exact u.
+      exact t0.
+      exact w.
+  - apply (RelAppProp sg env r).
+    eapply hvec_map.
+    2:{ exact h. }
+    intros.
+    eapply Term_var_subst.
+    exact u.
+    exact X.
+    exact w.
+Defined.

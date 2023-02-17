@@ -75,3 +75,26 @@ Proof.
     apply (f_app f).
     exact (hvec_replace w t terms).
 Defined.
+
+Fixpoint Term_var_subst {S} {f_sg : f_sig S} {env} {s s'}
+  (u : Term f_sg env s') (t : Term f_sg env s)
+  (w : witness s' env) : Term f_sg env s.
+Proof.
+  destruct t.
+  - destruct (PeanoNat.Nat.eq_dec
+      (nat_of_wit w0)
+      (nat_of_wit w)).
+    + assert (s = s').
+      { destruct (heq_of_nat_eq _ _ e).
+        exact x.
+      }
+      destruct H.
+      exact u.
+    + exact (var s w0).
+  - apply (f_app f).
+    induction h.
+    + exact hvnil.
+    + apply hvcons.
+      * exact (Term_var_subst S _ _ _ _ u y w).
+      * exact IHh.
+Defined.

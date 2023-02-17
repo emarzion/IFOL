@@ -112,3 +112,34 @@ Proof.
       (fun x y => eval_Term eval_S (func_dom eval_S sg eval_sig) args y)).
     now rewrite rhv_replace_proj.
 Defined.
+
+Fixpoint eval_Term_var_subst {S} {f_sg} {env} {s s'}
+  (eval_S : S -> Type) (eval_f_sig : f_sig_dom eval_S f_sg)
+  (args : env_dom eval_S env) (t : Term f_sg env s) (u : Term f_sg env s')
+  (w : witness s' env) {struct t} :
+  eval_Term eval_S eval_f_sig args (Term_var_subst u t w) =
+    let eval_u := eval_Term eval_S eval_f_sig args u in
+    let args' := rhv_replace w eval_u args in
+    eval_Term eval_S eval_f_sig args' t.
+Proof.
+  destruct t.
+  - simpl.
+    destruct PeanoNat.Nat.eq_dec.
+    + destruct heq_of_nat_eq.
+      destruct x.
+      simpl.
+      rewrite y.
+      now rewrite rhv_proj_replace.
+    + now rewrite rhv_proj_replace_neq.
+  - simpl.
+    f_equal.
+    generalize h.
+    intro h0.
+    induction h0.
+    + reflexivity.
+    + simpl.
+      f_equal.
+      * apply eval_Term_var_subst.
+      * apply IHh0.
+        exact h0.
+Defined.

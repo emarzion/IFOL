@@ -56,10 +56,6 @@ Proof.
     exact (of_hvec h).
 Defined.
 
-(*
-Axiom cheat : forall {X},X.
-*)
-
 Lemma rel_equal {X} (P : X -> Prop) :
   forall x y : X, x = y -> P x <-> P y.
 Proof.
@@ -68,7 +64,6 @@ Proof.
   tauto.
 Defined.
 
-(* TODO: complete this*)
 Fixpoint eval_Formula_subst {S} (eval_S : S -> Type)
   (sg : sig S)
   (eval_sig : sig_dom eval_S sg)
@@ -301,4 +296,70 @@ Proof.
     simpl in eFw.
     rewrite eFw.
     reflexivity.
+Defined.
+
+Fixpoint eval_Formula_var_subst {S} (eval_S : S -> Type)
+  (sg : sig S)
+  (eval_sig : sig_dom eval_S sg)
+  (env : list S)
+  (args : env_dom eval_S env)
+  (s : S)
+  (w : witness s env)
+  (phi : Formula sg env)
+  (t : Term (func sg) env s) :
+  eval_Formula eval_S sg eval_sig env args
+    (Formula_var_subst t phi w) <->
+  eval_Formula eval_S sg eval_sig env
+    (rhv_replace w (eval_Term eval_S (func_dom eval_S _ eval_sig) args t) args) phi.
+Proof.
+  destruct phi.
+  - simpl; tauto.
+  - destruct b; simpl;
+    repeat rewrite eval_Formula_var_subst; tauto.
+  - destruct q; simpl.
+    + split.
+      * intros [x Hx].
+        exists x.
+        rewrite eval_Formula_var_subst in Hx.
+        simpl in Hx.
+        assert ((x, args) = rhv_insert pwhd x args) by reflexivity.
+        rewrite H in Hx.
+        rewrite eval_Term_weaken in Hx.
+        exact Hx.
+      * intros [x Hx].
+        exists x.
+        rewrite eval_Formula_var_subst.
+        simpl.
+        assert ((x, args) = rhv_insert pwhd x args) by reflexivity.
+        rewrite H.
+        rewrite eval_Term_weaken.
+        exact Hx.
+    + split.
+      * intros H x.
+        pose (Hx := H x).
+        simpl in Hx.
+        rewrite eval_Formula_var_subst in Hx.
+        assert ((x, args) = rhv_insert pwhd x args) by reflexivity.
+        rewrite H0 in Hx.
+        rewrite eval_Term_weaken in Hx.
+        exact Hx.
+      * intros H x.
+        pose (Hx := H x).
+        simpl in Hx.
+        rewrite eval_Formula_var_subst.
+        assert ((x, args) = rhv_insert pwhd x args) by reflexivity.
+        rewrite H0.
+        rewrite eval_Term_weaken.
+        exact Hx.
+  - simpl.
+    repeat rewrite eval_Term_var_subst.
+    tauto.
+  - simpl.
+    apply rel_equal.
+    induction h.
+    + reflexivity.
+    + simpl.
+      rewrite IHh.
+      rewrite eval_Term_var_subst.
+      reflexivity.
 Defined.

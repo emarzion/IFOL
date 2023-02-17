@@ -11,6 +11,44 @@ Inductive witness {X} : X -> list X -> Type :=
       witness y xs ->
       witness y (x :: xs).
 
+Definition witness_heq {X} {xs} {x x' : X}
+  (w : witness x xs) (w' : witness x' xs) : Prop :=
+  exists pf : x = x',
+    match pf with
+    | eq_refl => fun v => w = v
+    end w'.
+
+Fixpoint nat_of_wit {X} {xs} {x : X}
+  (w : witness x xs) : nat :=
+  match w with
+  | whd => 0
+  | wtl w' => S (nat_of_wit w')
+  end.
+
+Definition witness_hneq {X} {xs} {x x' : X}
+  (w : witness x xs) (w' : witness x' xs) : Prop :=
+  nat_of_wit w <> nat_of_wit w'.
+
+Lemma heq_of_nat_eq {X} {xs} {x x' : X}
+  (w : witness x xs) (w' : witness x' xs) :
+  nat_of_wit w = nat_of_wit w' -> witness_heq w w'.
+Proof.
+  intro.
+  induction w.
+  - dependent destruction w'.
+    + exists eq_refl. reflexivity.
+    + inversion H.
+  - dependent destruction w'.
+    + inversion H.
+    + simpl in H.
+      inversion H.
+      destruct (IHw w' H1).
+      destruct x0.
+      rewrite H0.
+      exists eq_refl.
+      reflexivity.
+Defined.
+
 (** [part_witness x xs ys is an informative proof that
     x can be placed somewhere in xs to produce ys. *)
 Inductive part_witness {X} : X -> list X -> list X -> Type :=

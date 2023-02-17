@@ -25,5 +25,9 @@ Proof.
     intros.
     induction x.
     + exact H.
-    + admit.
-Admitted.
+    + pose proof (H0 x IHx) as G.
+      rewrite Formula.eval_Formula_var_subst in G.
+      exact G.
+Defined.
+
+Print Assumptions eval_HA_theory.

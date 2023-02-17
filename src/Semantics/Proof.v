@@ -100,5 +100,3 @@ Proof.
     simpl in e0.
     now rewrite eval_Formula_subterm_subst in e.
 Defined.
-
-Print Assumptions eval_Proof.
