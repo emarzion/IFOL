@@ -104,6 +104,30 @@ Proof.
     now rewrite IHw.
 Defined.
 
+Lemma rhv_proj_replace {X} {Y : X -> Type} {xs} {x}
+  (w : witness x xs) (ys : RHVec Y xs) (y : Y x) :
+  rhv_proj w (rhv_replace w y ys) = y.
+Proof.
+  induction w; simpl; now destruct ys.
+Qed.
+
+Lemma rhv_proj_replace_neq {X} {Y : X -> Type} {xs} {x x'}
+  (w : witness x xs) (w' : witness x' xs) (ys : RHVec Y xs) (y : Y x') :
+  nat_of_wit w <> nat_of_wit w' ->
+  rhv_proj w (rhv_replace w' y ys) = rhv_proj w ys.
+Proof.
+  intro Hneq.
+  induction w.
+  - dependent destruction w'.
+    + now elim Hneq.
+    + simpl; now destruct ys.
+  - dependent destruction w'.
+    + simpl; now destruct ys.
+    + simpl; destruct ys.
+      apply IHw.
+      simpl in Hneq; auto.
+Qed.
+
 Lemma rhv_replace_proj {X} {Y : X -> Type} {xs} {x}
   (w : witness x xs) (ys : RHVec Y xs) :
   rhv_replace w (rhv_proj w ys) ys = ys.
