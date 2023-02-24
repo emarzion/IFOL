@@ -31,3 +31,31 @@ Proof.
 Defined.
 
 Print Assumptions eval_HA_theory.
+
+Require Import IFOL.Syntax.Formula.
+Require Import IFOL.Syntax.Proof.
+Require Import IFOL.Semantics.Proof.
+
+Lemma HA_con : @Proof _ HA_sig HA_theory nil nil
+  (NullProp _ Bot) -> False.
+Proof.
+  intro pf.
+  pose (@eval_Proof
+    _
+    eval_HA_sort
+    _
+    nil
+    _
+    nil
+    eval_HA_sig
+    tt
+    _
+    eval_HA_theory
+    tt
+    pf
+  ).
+  simpl in e.
+  exact e.
+Qed.
+
+Print NullOp.
