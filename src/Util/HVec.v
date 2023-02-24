@@ -1,4 +1,5 @@
 Require Import Coq.Program.Equality.
+
 Require Import List.
 Import ListNotations.
 
@@ -17,11 +18,12 @@ Fixpoint hvec_proj {X} {Y : X -> Type} {xs} (v : HVec Y xs) {struct v} :
 Proof.
   destruct v.
   - intros x w.
-    dependent destruction w.
+    destruct w.
   - intros z w.
-    dependent destruction w.
-    + exact y.
-    + exact (hvec_proj X Y xs v y0 w).
+    destruct w.
+    + destruct e.
+      exact y.
+    + exact (hvec_proj X Y xs v _ w).
 Defined.
 
 Fixpoint hvec_map {X} {Y Z : X -> Type} {xs} (f : forall x, Y x -> Z x)
@@ -37,14 +39,11 @@ Lemma hvec_proj_map {X} {Y Z : X -> Type} {xs} {x} (f : forall x, Y x -> Z x)
   f x (hvec_proj ys w).
 Proof.
   induction ys.
-  - dependent destruction w.
-  - dependent destruction w.
-    + reflexivity.
+  - destruct w.
+  - destruct w.
+    + destruct e.
+      reflexivity.
     + simpl.
-      unfold solution_left.
-      unfold eq_rect_r.
-      unfold eq_rect.
-      simpl.
       apply IHys.
 Defined.
 
@@ -63,115 +62,208 @@ Proof.
 Defined.
 
 Fixpoint hvec_insert {X} {Y : X -> Type}
-  {xs xs'} {x} (pw : part_witness x xs' xs) {struct pw} :
-  Y x -> HVec Y xs' -> HVec Y xs.
+  {xs xs'} {x} (pw : part_witness x xs' xs)
+  (y : Y x) (v : HVec Y xs') {struct v} : HVec Y xs.
 Proof.
-  destruct pw.
-  - exact hvcons.
-  - intros u v.
-    dependent destruction v.
-    + apply (hvcons y0).
-      eapply hvec_insert.
-      * exact pw.
-      * exact u.
-      * exact v.
+  destruct v.
+  - destruct xs.
+    + destruct pw.
+    + destruct pw.
+      * destruct p.
+        destruct e,e0.
+        exact (hvcons y hvnil).
+      * destruct e.
+  - destruct xs.
+    + destruct pw.
+    + destruct pw.
+      * destruct p.
+        destruct e,e0.
+        exact (hvcons y (hvcons y0 v)).
+      * destruct p.
+        destruct e.
+        apply (hvcons y0).
+        eapply hvec_insert.
+        ** exact p.
+        ** exact y.
+        ** exact v.
 Defined.
 
-Fixpoint hvec_proj_hvec_insert_witness_weak {X} {Y : X -> Type}
-  {xs xs'} {x x'} (pw : part_witness x xs' xs) (w : witness x' xs')
-  (y : Y x) (v : HVec Y xs') {struct pw} :
+Fixpoint hvec_proj_hvec_insert_witness_weak
+  {X} {Y : X -> Type}
+  {xs xs'} {x x'} (pw : part_witness x xs' xs)
+  (w : witness x' xs')
+  (y : Y x) (v : HVec Y xs') {struct v} :
   hvec_proj (hvec_insert pw y v) (witness_weak pw w) =
   hvec_proj v w.
 Proof.
-  destruct pw.
-  - reflexivity.
-  - dependent destruction w.
-    + dependent destruction v.
-      reflexivity.
-    + dependent destruction v.
-      simpl.
-      unfold solution_left.
-      unfold eq_rect_r.
-      unfold eq_rect.
-      simpl.
-      apply hvec_proj_hvec_insert_witness_weak.
+  destruct v.
+  - destruct w.
+  - simpl.
+    destruct xs.
+    + destruct pw.
+    + destruct pw.
+      * destruct p.
+        destruct e, e0.
+        destruct w.
+        ** now destruct e.
+        ** reflexivity.
+      * destruct p.
+        destruct e.
+        destruct w.
+        ** destruct e.
+           reflexivity.
+        ** simpl.
+           apply hvec_proj_hvec_insert_witness_weak.
 Defined.
-(* todo: without axioms *)
 
-Lemma hvev_proj_hvec_insert_invert {X} {Y : X -> Type}
+Lemma inl_inj {A B} :
+  forall x y : A, @inl A B x = inl y ->
+  x = y.
+Proof.
+  intros.
+  inversion H.
+  reflexivity.
+Defined.
+
+Lemma inr_inj {A B} :
+  forall x y : B, @inr A B x = inr y ->
+  x = y.
+Proof.
+  intros.
+  inversion H.
+  reflexivity.
+Defined.
+
+Fixpoint hvec_proj_hvec_insert_invert {X} {Y : X -> Type}
   {xs xs'} {x x'} (pw : part_witness x' xs' xs) (w : witness x xs)
-  (w' : witness x xs') (v : HVec Y xs') (a : Y x') :
+  (w' : witness x xs') (v : HVec Y xs') (a : Y x')
+  {struct v} :
   witness_invert pw w = inr w' ->
   hvec_proj v w' =
   hvec_proj (hvec_insert pw a v) w.
 Proof.
-  intro H.
-  induction pw.
-  - simpl in *.
-    dependent destruction w.
-    + discriminate.
-    + simpl in *.
-      unfold solution_left in *.
-      unfold eq_rect_r in *.
-      unfold eq_rect in *.
-      simpl in *.
-      congruence.
-  - dependent destruction v.
-    simpl in *.
-    dependent destruction w.
-    + simpl in *.
-      unfold solution_left in *.
-      unfold eq_rect_r in *.
-      unfold eq_rect in *.
-      simpl in *.
-      inversion H; reflexivity.
-    + unfold solution_left in *.
-      unfold eq_rect_r in *.
-      unfold eq_rect in *.
-      simpl in *.
-      destruct (witness_invert pw w) eqn:?.
-      * discriminate.
-      * inversion H.
-        simpl.
-        apply IHpw; auto.
+  destruct v.
+  - intro.
+    destruct w'.
+  - intro.
+    simpl.
+    destruct w'.
+    + destruct e.
+      destruct xs.
+      * destruct pw.
+      * destruct pw.
+        ** destruct p.
+           destruct e, e0.
+           simpl in H.
+           destruct w.
+           *** discriminate.
+           *** now inversion H.
+        ** destruct p.
+           destruct e.
+           simpl in H.
+           destruct w.
+           *** assert (eq_refl = e).
+               { eapply inl_inj.
+                 eapply inr_inj.
+                 symmetry in H.
+                 exact H.
+               }
+               destruct H0.
+               reflexivity.
+           *** destruct (witness_invert p w); discriminate.
+    + destruct xs.
+      * destruct pw.
+      * destruct pw.
+        ** destruct p.
+           destruct e, e0.
+           simpl.
+           destruct w.
+           *** discriminate.
+           *** inversion H.
+               reflexivity.
+        ** destruct p.
+           destruct e.
+           
+           simpl in *.
+           destruct w.
+           *** simpl.
+               destruct e.
+           simpl.
+           inversion H.
+           *** destruct witness_invert eqn:?.
+               **** discriminate.
+               **** erewrite hvec_proj_hvec_insert_invert.
+                    reflexivity.
+                    inversion H.
+                    destruct H1.
+                    exact Heqs.
 Defined.
 
-Lemma hvec_proj_hvec_insert_invert2 {X} {Y : X -> Type}
+(*
+Fixpoint hvec_proj_hvec_insert_invert2 {X} {Y : X -> Type}
   {xs xs'} {x} (pw : part_witness x xs' xs) (w : witness x xs)
-  (pf : x = x) (v : HVec Y xs') (a : Y x) :
-  witness_invert pw w = inl pf ->
+  (v : HVec Y xs') (a : Y x) {struct v} :
+  witness_invert pw w = inl eq_refl ->
   hvec_proj (hvec_insert pw a v) w = a.
 Proof.
-  intro H.
-  induction pw.
-  - simpl in *.
-    dependent destruction w.
-    + reflexivity.
-    + discriminate.
-  - simpl in *.
-    dependent destruction w.
-    + discriminate.
-    + simpl in *.
-      unfold solution_left in *.
-      unfold eq_rect_r in *.
-      unfold eq_rect in *.
+  destruct v; intro H.
+  - simpl.
+    destruct xs.
+    + destruct pw.
+    + destruct pw.
+      destruct p.
+      destruct e, e0.
       simpl in *.
-      destruct (witness_invert pw w) eqn:?.
-      * dependent destruction v; simpl.
-        unfold solution_left.
-        unfold eq_rect_r.
-        unfold eq_rect. simpl.
-        eapply IHpw.
-        exact Heqs.
+      destruct w.
+      simpl.
+      simpl in H.
+      dependent destruction e.
+      reflexivity.
+      simpl.
+      destruct e.
+      destruct e.
+  - simpl.
+    destruct xs.
+    destruct pw.
+    destruct pw.
+    destruct p.
+    + destruct e.
+      destruct e0.
+      simpl.
+      simpl in H.
+      destruct w.
+      assert (e = eq_refl).
+      { eapply inl_inj. exact H. }
+      rewrite H0.
+      reflexivity.
+      discriminate.
+    + destruct p.
+      destruct e.
+      simpl.
+      destruct w.
       * discriminate.
+      * apply hvec_proj_hvec_insert_invert2.
+        simpl in H.
+        destruct witness_invert.
+        ** f_equal.
+           eapply inl_inj.
+           exact H.
+        ** discriminate.
 Defined.
+Print Assumptions hvec_proj_hvec_insert_invert2.
+(* FIXME*)
+*)
 
 Fixpoint hvec_replace {X} {Y : X -> Type} {xs} {x}
-  (w : witness x xs) (y : Y x) {struct w} : HVec Y xs -> HVec Y xs.
+  (w : witness x xs) (y : Y x) (v : HVec Y xs) {struct v} : HVec Y xs.
 Proof.
-  destruct w; intro v; dependent destruction v.
-  - exact (hvcons y v).
-  - exact (hvcons y1 (hvec_replace _ _ _ _ w y v)).
+  destruct v.
+  - destruct w.
+  - destruct w.
+    + destruct e.
+      exact (hvcons y v).
+    + exact (hvcons y0
+        (hvec_replace _ _ _ _ w y v)).
 Defined.
 
 Lemma hvec_map_replace {X} {Y Z : X -> Type} {xs} {x}
@@ -181,14 +273,11 @@ Lemma hvec_map_replace {X} {Y Z : X -> Type} {xs} {x}
   hvec_replace w (f x y) (hvec_map f ys).
 Proof.
   induction ys.
-  - dependent destruction w.
-  - dependent destruction w.
-    + reflexivity.
+  - destruct w.
+  - destruct w.
+    + destruct e.
+      reflexivity.
     + simpl.
-      unfold solution_left.
-      unfold eq_rect_r.
-      unfold eq_rect.
-      simpl.
       now rewrite IHys.
 Defined.
 
@@ -197,14 +286,11 @@ Lemma hvec_replace_proj {X} {Y : X -> Type} {xs} {x}
   hvec_replace w (hvec_proj ys w) ys = ys.
 Proof.
   induction ys.
-  - dependent destruction w.
-  - dependent destruction w.
-    + reflexivity.
+  - destruct w.
+  - destruct w.
+    + destruct e.
+      reflexivity.
     + simpl.
-      unfold solution_left.
-      unfold eq_rect_r.
-      unfold eq_rect.
-      simpl.
       now rewrite IHys.
 Defined.
 
