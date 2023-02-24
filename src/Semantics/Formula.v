@@ -260,13 +260,10 @@ Proof.
   - now rewrite eval_Term_subterm_subst.
   - apply rel_equal.
     induction terms.
-    + dependent destruction w.
-    + dependent destruction w.
+    + destruct w.
+    + destruct w.
       * simpl.
-        f_equal.
-        unfold solution_left.
-        unfold eq_rect_r.
-        unfold eq_rect.
+        destruct e.
         simpl.
         now rewrite eval_Term_subterm_subst.
       * simpl.

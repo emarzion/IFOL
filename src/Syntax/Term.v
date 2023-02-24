@@ -78,7 +78,7 @@ Defined.
 
 Fixpoint Term_var_subst {S} {f_sg : f_sig S} {env} {s s'}
   (u : Term f_sg env s') (t : Term f_sg env s)
-  (w : witness s' env) : Term f_sg env s.
+  (w : witness s' env) {struct t} : Term f_sg env s.
 Proof.
   destruct t.
   - destruct (PeanoNat.Nat.eq_dec

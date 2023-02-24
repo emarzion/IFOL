@@ -69,8 +69,8 @@ Proof.
       unfold eq_rect.
       simpl.
       erewrite rhv_proj_rhv_insert_invert2.
-      * reflexivity.
-      * exact Heqs0.
+      2:{ exact Heqs0. }
+      reflexivity.
     + simpl.
       unfold env_dom in args.
       erewrite rhv_proj_rhv_insert_invert; eauto.

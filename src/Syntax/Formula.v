@@ -129,7 +129,7 @@ Fixpoint Formula_subterm_subst {S} {sg : sig S} {env} {s}
 
 Fixpoint Formula_var_subst {S} {sg : sig S} {env} {s}
   (u : Term (func sg) env s) (p : Formula sg env)
-  (w : witness s env) : Formula sg env.
+  (w : witness s env) {struct p} : Formula sg env.
 Proof.
   destruct p.
   - exact (NullProp sg n).
