@@ -6,68 +6,6 @@ Require Import Coq.Program.Equality.
 Require Import IFOL.Util.RHVec.
 Require Import IFOL.Util.BList.
 
-(* Inductive BVec {X} {Y : list X -> Type} {F : X -> Type}
-  (G : forall xs, HVec F xs -> Y xs -> Type)
-  : forall {xs}, HVec F xs -> BList Y xs -> Type :=
-  | bvnil : BVec G hvnil bnil
-  | bvcons {xs} (y : Y xs) {v : HVec F xs}
-      (b : BList Y xs) :
-      G xs v y -> BVec G v b -> BVec G v (bcons y b)
-  | bvbump {x} {xs} {v : HVec F xs} (f : F x)
-      (b : BList Y xs) :
-      BVec G v b -> BVec G (hvcons f v) (bump x b).
-
-Arguments bvnil {_} {_} {_} {_}.
-Arguments bvcons {_} {_} {_} {_} {_} {_} {_} {_}.
-Arguments bvbump {_} {_} {_} {_} {_} {_} {_} {_} {_}.
-
-Axiom cheat : forall {X}, X.
-
-(*
-HVec F (x :: xs)
-
-*)
-
-Definition hv_tail {X} {F : X -> Type} {x} {xs} :
-  HVec F (x :: xs) -> HVec F xs.
-Proof.
-  intro.
-  dependent destruction X0.
-  exact X0.
-Defined.
-
-Definition de_bump {X} {Y : list X -> Type} {F : X -> Type}
-  {G : forall xs, HVec F xs -> Y xs -> Type} {x} {xs} {f} {fs : HVec F xs}
-  {ys} : BVec G (hvcons f fs) (bump x ys) -> BVec G fs ys.
-Proof.
-  intro.
-  dependent destruction X0.
-  exact X0.
-Defined.
-
-Fixpoint bv_proj {X} {Y : list X -> Type} {F : X -> Type}
-  {G : forall xs, HVec F xs -> Y xs -> Type}
-  {xs} {fs : HVec F xs} {ys : BList Y xs}
-  (bv : BVec G fs ys) (i : bindex ys) {struct i} :
-  G (suff _ (bl_proj ys i))
-    (hvec_suff (suff_wit _ (bl_proj ys i)) fs)
-    (data _ (bl_proj ys i)).
-Proof.
-  destruct i eqn:?.
-  - simpl.
-    dependent destruction bv.
-    exact g.
-  - simpl.
-    dependent destruction bv.
-    epose proof (bv_proj X Y F G xs v ys bv b).
-    destruct (bl_proj ys b).
-    simpl in *.
-    exact X0.
-  - epose proof (bv_proj X Y F G xs (hv_tail fs) ys _ b).
-    apply cheat.
-    Unshelve. apply cheat.
-Defined. *)
-
 Fixpoint BVec {X} {Y : list X -> Type} {F : X -> Type}
   (G : forall xs, RHVec F xs -> Y xs -> Type) {xs} :
   RHVec F xs -> BList Y xs -> Type :=

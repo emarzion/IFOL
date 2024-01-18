@@ -4,53 +4,6 @@ Import ListNotations.
 Require Import IFOL.Util.Witness.
 Require Import IFOL.Util.List_index.
 
-(*
-Inductive BList {X} (Y : list X -> Type) : list X -> Type :=
-  | bnil : BList Y nil
-  | bcons {xs} : Y xs -> BList Y xs -> BList Y xs
-  | bump {xs} x : BList Y xs -> BList Y (cons x xs).
-
-
-
-Arguments bnil {_} {_}.
-Arguments bcons {_} {_} {_} _ _.
-Arguments bump {_} {_} {_} _ _.
-
-Inductive bindex {X} {Y : list X -> Type} :
-  forall {xs}, BList Y xs -> Type :=
-  | biz {xs} {y} {ys : BList Y xs} : bindex (bcons y ys)
-  | bis {xs} {y} {ys : BList Y xs} :
-      bindex ys -> bindex (bcons y ys)
-  | bibump {xs} {ys : BList Y xs} {x} :
-      bindex ys -> bindex (bump x ys).
-
-Record bindex_result {X} {Y} {xs : list X} (ys : BList Y xs) : Type := {
-  suff : list X;
-  suff_wit : suffix_wit suff xs;
-  data : Y suff
-  }.
-
-Fixpoint bl_proj {X} {Y : list X -> Type} {xs}
-  (ys : BList Y xs) (i : bindex ys) : bindex_result ys.
-Proof.
-  destruct i eqn:?.
-  - econstructor.
-    2:{ exact y. }
-    apply sw_refl.
-  - epose (bl_proj X Y xs ys b).
-    destruct b0.
-    econstructor.
-    2:{ exact data0. }
-    exact suff_wit0.
-  - epose (bl_proj X Y xs ys b).
-    destruct b0.
-    econstructor.
-    apply sw_cons.
-    exact suff_wit0.
-    exact data0.
-Defined.
- *)
-
 Fixpoint BList {X} (Y : list X -> Type) (xs : list X) : Type :=
   match xs with
   | [] => list (Y [])

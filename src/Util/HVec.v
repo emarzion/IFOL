@@ -183,7 +183,6 @@ Proof.
                reflexivity.
         ** destruct p.
            destruct e.
-           
            simpl in *.
            destruct w.
            *** simpl.
@@ -198,61 +197,6 @@ Proof.
                     destruct H1.
                     exact Heqs.
 Defined.
-
-(*
-Fixpoint hvec_proj_hvec_insert_invert2 {X} {Y : X -> Type}
-  {xs xs'} {x} (pw : part_witness x xs' xs) (w : witness x xs)
-  (v : HVec Y xs') (a : Y x) {struct v} :
-  witness_invert pw w = inl eq_refl ->
-  hvec_proj (hvec_insert pw a v) w = a.
-Proof.
-  destruct v; intro H.
-  - simpl.
-    destruct xs.
-    + destruct pw.
-    + destruct pw.
-      destruct p.
-      destruct e, e0.
-      simpl in *.
-      destruct w.
-      simpl.
-      simpl in H.
-      dependent destruction e.
-      reflexivity.
-      simpl.
-      destruct e.
-      destruct e.
-  - simpl.
-    destruct xs.
-    destruct pw.
-    destruct pw.
-    destruct p.
-    + destruct e.
-      destruct e0.
-      simpl.
-      simpl in H.
-      destruct w.
-      assert (e = eq_refl).
-      { eapply inl_inj. exact H. }
-      rewrite H0.
-      reflexivity.
-      discriminate.
-    + destruct p.
-      destruct e.
-      simpl.
-      destruct w.
-      * discriminate.
-      * apply hvec_proj_hvec_insert_invert2.
-        simpl in H.
-        destruct witness_invert.
-        ** f_equal.
-           eapply inl_inj.
-           exact H.
-        ** discriminate.
-Defined.
-Print Assumptions hvec_proj_hvec_insert_invert2.
-(* FIXME*)
-*)
 
 Fixpoint hvec_replace {X} {Y : X -> Type} {xs} {x}
   (w : witness x xs) (y : Y x) (v : HVec Y xs) {struct v} : HVec Y xs.

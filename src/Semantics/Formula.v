@@ -27,7 +27,7 @@ Definition eval_Quantifier (q : Quantifier) :
   forall {X}, (X -> Prop) -> Prop :=
   match q with
   | Sigma => ex
-  | P => fun X P => forall x : X, P x
+  | Pi => fun X P => forall x : X, P x
   end.
 
 Fixpoint eval_Formula {S} (eval_S : sort_dom S)
